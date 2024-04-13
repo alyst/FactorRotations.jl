@@ -24,6 +24,7 @@ Oblimax
 Oblimin
 Parsimax
 PatternSimplicity
+Promax
 Quartimax
 Simplimax
 TandemCriteria

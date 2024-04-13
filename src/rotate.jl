@@ -214,6 +214,33 @@ function rotate(Λ, method::TandemCriteria; kwargs...)
     return rotation_2
 end
 
+function rotate(Λ, method::Promax; kwargs...)
+    varirot = rotate(Λ, Varimax(); kwargs...)
+
+    # this is based on promax() from factanal.R in /src/library/stats/R
+
+    # 1. create 'ideal' pattern matrix
+    Q = varirot.L .* abs.(varirot.L).^(method.kappa-1)
+    # 2. regress L on Q to obtain 'rotation matrix' (same as 'procrustes')
+    U = varirot.L \ Q
+
+    # 3. make orthonormal
+    d = diag(inv(Symmetric(U'U)))
+    U = U * diagm(sqrt.(d))
+
+    res = FactorRotation(varirot.L * U, varirot.T * U, varirot.weights)
+
+    #LAMBDA <- out$loadings
+    #PHI <- solve(crossprod(out$rotmat))
+
+    # compute 'ROT' to be compatible with GPa
+    #ROTt.inv <- solve(crossprod(LAMBDA.orig),
+    #                  crossprod(LAMBDA.orig, LAMBDA))
+    #ROT <- solve(t(ROTt.inv))
+
+    return res
+end
+
 """
     rotate!(Λ, method::RotationMethod; kwargs...)
 

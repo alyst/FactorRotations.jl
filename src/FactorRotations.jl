@@ -36,6 +36,7 @@ export Equamax
 export Geomin
 export Parsimax
 export PatternSimplicity
+export Promax
 export Infomax
 export MinimumEntropy
 export MinimumEntropyRatio
